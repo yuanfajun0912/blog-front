@@ -1,0 +1,40 @@
+@media screen and (max-width: 800px) {  //适配移动端
+  position: absolute;
+  padding: 0;
+  z-index: 1001;
+  height: 20vh;
+  width: 100vw;
+  display: flex;
+  justify-content: space-around;
+  .el-button {
+    display: inline-block !important;  //强制出现
+    color: inherit;  
+    i.el-icon-s-unfold {
+      font-size: 35px;
+      // color: inherit;  //使得图标的color能随着NavBar的color改变 
+    }
+  }
+  ul.nav {  //隐藏只在PC端出现的ul
+    display: none;
+  }
+  ul.mobile-nav {
+    width: 60%;
+    margin: 0 auto;
+    list-style: none;
+    font-weight: bold;
+    li {
+      margin-bottom: 13px;
+      padding-left: 4px;
+      &:hover {
+        cursor: pointer;
+      }
+      &.current {  //被选中
+        box-shadow: -4px 0 0px -1px rgb(164, 182, 223);
+      }
+    }
+  }
+  .el-drawer {
+    z-index: 1001;
+    position: relative;
+  }
+}
