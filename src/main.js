@@ -11,7 +11,7 @@ import axios from 'axios'
 //则所有组件都可访问这个axios实例
 Vue.prototype.$http = axios.create({ 
   // baseURL: 'http://192.168.43.13:3000/'
-  baseURL: process.env.VUE_APP_API_URL || '/' //根据服务器域名动态决定url
+  baseURL: process.env.VUE_APP_API_URL || '/api/' //根据服务器域名动态决定url
 })
 Vue.prototype.$bus = new Vue()  //注册事件总线
 Vue.config.productionTip = false
