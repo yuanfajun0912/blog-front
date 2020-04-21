@@ -1,6 +1,11 @@
 const path = require("path");
 module.exports = {
-  publicPath: './',  //解决打包后页面空白的问题
+  // npm run build 后生成的打包文件放在哪里
+  outputDir: __dirname + '/../server/front',
+  // publicPath: './',  //解决打包后页面空白的问题
+  publicPath: process.env.NODE_ENV === 'production'  // 生产/开发环境的路径问题
+    ? '/front/'
+    : './',
 
   devServer: {
     port: 8081,  //修改默认端口号  
