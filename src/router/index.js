@@ -56,7 +56,7 @@ const routes = [
     path: '/detail/:id',
     name: 'Detail',
     component: Detail,
-    meta: { title: '细节 | 念风' }
+    meta: { title: '文章 | 念风' }
   }
 ]
 

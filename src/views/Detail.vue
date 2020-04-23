@@ -10,7 +10,7 @@
         <i class="el-icon-edit"></i>
         <span>{{this.article.time}}</span>
       </div>
-      <el-image :src="article.topicImage" fit="cover">
+      <el-image :src="article.topicImage" fit="cover" v-if="article.topicImage">
         <div slot="error" class="image-slot">
           <!-- 在失败回调中再显示一次图片，解决图片初始化不显示的问题 -->
           <el-image :src="article.topicImage" fit="cover">

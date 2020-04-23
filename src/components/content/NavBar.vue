@@ -96,7 +96,7 @@ export default {
   },
   mounted() { 
     window.addEventListener('resize', this.pcCloseDrawer, false)
-    if(this.$route.path !== '/home' && this.$route.path !== '/tags' && this.$route.path !== '/timeline' && this.$route.path !== '/leavemessages' && this.$route.path != '/about') {
+    if(this.$route.path !== '/home' && this.$route.path !== '/tags' && this.$route.path !== '/timeline' && this.$route.path !== '/leavemessages' && this.$route.path !== '/about') {
       this.currentIndex = -1
     }
   },
