@@ -1,5 +1,5 @@
 <template>
-  <div id="articles-list">
+  <div id="articles-list" :class="{moon: this.$store.state.isMoon}">
     <articles-list-item v-for="(article, index) in articles" :key="index"
                         :article="article" @click.native="toDetail(article)">
     </articles-list-item>
@@ -44,5 +44,9 @@ export default {
     position: relative;
     bottom: 70px;
     z-index: 1500;
+  }
+  .moon {
+    color: @moonColor;
+    background-color: @moonSecondaryBgColor !important;
   }
 </style>

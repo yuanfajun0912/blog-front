@@ -5,7 +5,7 @@
                        :timestamp="thing.time" placement="top" size="large">
         <el-card>
           <h4>{{thing.title}}</h4>
-          <p>{{thing.body}}</p>
+          <p v-html="thing.body"></p>
         </el-card>
       </el-timeline-item>
     </el-timeline>

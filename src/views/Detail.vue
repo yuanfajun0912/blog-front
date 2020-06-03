@@ -10,7 +10,7 @@
         <i class="el-icon-edit"></i>
         <span>{{this.article.time}}</span>
       </div>
-      <el-image :src="article.topicImage" fit="cover" v-if="article.topicImage">
+      <el-image :src="article.topicImage" fit="cover" v-if="article.topicImage" @load="imageLoad">
         <div slot="error" class="image-slot">
           <!-- 在失败回调中再显示一次图片，解决图片初始化不显示的问题 -->
           <el-image :src="article.topicImage" fit="cover">
@@ -20,7 +20,7 @@
     </div>
     <div class="article-container">  
       <!-- 文章主体 -->
-      <div v-html="code" class="markdown-body"></div>
+      <div v-html="code" class="markdown-body" ref="article"></div>
       <!-- 喜欢 -->
       <div :class="{likebtn: true, reallylike: isLike}" @click="likeArticle">
         <!-- <i class="iconfont icon-like-sunny dislike" v-show="!isLike"></i><br> -->
@@ -50,6 +50,18 @@
     </div>
     <!-- 右侧控制区 -->
     <div class="control">
+      <!-- 目录 -->
+      <el-popover placement="left" trigger="click" width="200" v-if="menu.length"> 
+        <a :href="'#' + item.id" 
+           :style="menulist(item.level)" 
+           :class="{current: index === currentMenuIndex}"
+           @click="currentTitle(index)"
+           v-for="(item, index) in menu" :key="index">{{item.body}}</a>
+        <div class="menuctn" slot="reference">
+          <i class="el-icon-notebook-2"></i><br>
+          <span>menu</span>
+        </div>
+      </el-popover>
       <div :class="{likectn: true, reallylike: isLike}">
         <i class="iconfont icon-article-like like" @click="likeArticle"></i><br>
         <span class="likecounts">{{article.like}}</span>
@@ -65,35 +77,49 @@
 <script>
 import marked from 'marked'
 import hljs from "highlight.js";
-import 'highlight.js/styles/a11y-light.css';
+import 'highlight.js/styles/agate.css';  //a11y-light.css
 import 'github-markdown-css';
 import Comments from 'components/content/Comments'
+// import { getArticleMenu } from 'common/utils.js'
 
 export default {
   name: 'Detail',
   data() {
     return {
       article: {},
-      code: '',
+      code: '',  //文章主体（html）
       allComments: [],  //一个文章中的所有评论
       messages: [],  //传入Comments的评论
       isLike: false,  //游客是否喜欢这篇文章
-      likeArticles: []  //游客喜欢的文章
+      likeArticles: [],  //游客喜欢的文章
+      menu: [],  //文章目录
+      menuItemPos: [],  //每一项离页面顶部的距离
+      currentMenuIndex: -1
     }
   },
   components: {
     Comments
   },
   computed: {
-    getCurrentUrl() {  //当前页面的url
-      return window.location.href  
-    }
+    getCurrentUrl() {  //当前页面的url(有#时去掉#后面的内容)
+      let articleUrl =  window.location.href  
+      let index = articleUrl.search(/#/m)
+      if(index === -1) {
+        return articleUrl
+      }else {
+        return articleUrl.slice(0, index)
+      }
+    } 
   },
   methods: {
     getArticle() {  //获取该文章的数据
       this.$http.get(`articlesList/${this.$route.params.id}`).then(res => {
         this.article = res.data
-        this.code = marked(this.article.value)
+        this.code = marked(this.article.value)  //获取文章的md源码并用marked解析
+        this.getMenu()  
+        // this.imageLoad()
+        this.getMenuItemPos() 
+        this.scrollPage()
         this.allComments = res.data.comments.reverse()  //获得所有评论
         this.messages = this.allComments.slice(0, 10)  //分页处理，只拿前10个
         this.isLikeArticle()  //放在这儿是为了确保this.article.title能拿到值
@@ -151,13 +177,112 @@ export default {
         document.querySelector('#comments-divider').scrollIntoView()
       }) 
     },
+    getMenu() {  //拿到目录
+      this.$nextTick(() => {
+        document.querySelector(".markdown-body").querySelectorAll("h1,h2,h3,h4,h5,h6").forEach(item => {
+          let obj = {
+            id: item.id,
+            level: parseInt(item.tagName.substr(1, 1)),  //对应的标题等级,越小标题越大,substr(1, 1)从1开始截取一个
+            body: item.innerHTML
+          }
+          this.menu.push(obj)
+        })
+      })
+    },
+    getMenuItemPos() {  //拿到目录每一项到页面顶部的距离
+      this.$nextTick(() => {
+        this.menuItemPos = []  //防止第二次运行该函数时this.menuItemPos已经有值了
+        this.menu.forEach(item => {
+          let el = document.getElementById(item.id)
+          let pos = 0
+          while(el && el.tagName !== 'BODY') {
+            pos += el.offsetTop
+            el = el.offsetParent
+          }
+          pos -= 20  //增强用户体验
+          this.menuItemPos.push(pos)
+        })
+        let isHome = this.$store.state.isHomeToDetail
+        let isTags = this.$store.state.isTagsToDetail
+        let fix = this.$store.state.fixValue
+        if(isHome) {  //是从home到detail的
+          this.menuItemPos = this.menuItemPos.map(i => {
+            i -= fix
+            return i
+          })
+        }else if(isTags) {  //从tags到detail的
+          this.menuItemPos = this.menuItemPos.map(i => {
+            i -= fix
+            return i
+          })
+        }
+      })
+    },
+    imageLoad() {  //顶部图加载后
+      this.$nextTick(() => {
+        // 拿到文章中的图片
+        let articleImages = document.querySelector(".article-container").querySelectorAll("img")
+        let promiseAll = []
+        if(articleImages.length) {
+          articleImages.forEach( (item, index) => {
+            promiseAll[index] = new Promise((resolve, reject) => {
+              item.onload = () => {
+                // hasLoadImage += 1
+                resolve()
+              }
+            })
+          })
+        }
+        Promise.all(promiseAll).then(() => {
+          this.getMenuItemPos() 
+        })
+      })
+    },
+    menulist(titleLevel) {  //根据标题的level决定样式,level越小标题越大
+      let maxLevel = 6   //先弄个最小的6
+      this.menu.forEach(item => {   //找出最大的level
+        if(item.level < maxLevel) {
+          maxLevel = item.level
+        }
+      })
+      let minus = titleLevel - maxLevel  //计算当前标题的level与最大level的差值
+      // return `menu-${minus+1}`
+      return {
+        'margin-left': minus*10 + 'px' 
+      }
+    },
+    currentTitle(i) {  //点击目录中具体的某项
+      this.currentMenuIndex = i
+    },
+    scrollPage() {  //滚动页面
+      this.$nextTick(() => {
+        if(this.menu.length) {
+          document.querySelector("#app").addEventListener("scroll", this.scrollFunc)
+        }
+      })
+    },
+    scrollFunc() {  //滚动事件触发的回调函数
+      let scrollPos = document.querySelector("#app").scrollTop
+      let num = this.menuItemPos.length
+      if(this.currentMenuIndex !== -1 && scrollPos < this.menuItemPos[0]) {
+        this.currentMenuIndex = -1
+      }
+      for(let i = 0; i < num - 1; i++) {
+        if(this.currentMenuIndex !== i && scrollPos >= this.menuItemPos[i] && scrollPos < this.menuItemPos[i+1]) {
+          return this.currentMenuIndex = i
+        }
+      }
+      if(this.currentMenuIndex !== num-1 && scrollPos >= this.menuItemPos[num-1]) {
+        return this.currentMenuIndex = num-1
+      }
+    },
   },
   created() {
     this.getArticle()
   },
   mounted(){
     marked.setOptions({  //marked配置
-      renderer: new marked.Renderer(),
+      renderer: new marked.Renderer(),  
       highlight: function(code) {
         return hljs.highlightAuto(code).value;
       },
@@ -171,11 +296,14 @@ export default {
       xhtml: false
     }
     );
-    this.$nextTick(() => {  //滚动条回到顶部
-      document.querySelector("#app").scrollTop = 0
+    this.$nextTick(() => {  
+      document.querySelector("#app").scrollTop = 0 //进入detail页面滚动条回到顶部
     })
     // localStorage.removeItem('likeArticles')
   },
+  destroy() {
+    document.querySelector("#app").removeEventListener("scroll", this.scrollFunc)
+  }
 }
 </script>
 
@@ -233,6 +361,10 @@ export default {
       z-index: 1000;
       .markdown-body{
         padding: 40px 5%;
+        /deep/ pre {  //代码块
+          color: rgb(197, 195, 195);  //未高亮代码颜色
+          background-color: #2b2b2b;  //代码块背景色
+        }
       }
       .likebtn {
         width: 100%;
@@ -281,8 +413,8 @@ export default {
     .control {
       background-color: rgb(255, 255, 255);
       position: fixed;
-      top: 50%;
-      right: 6px;
+      top: 45%;
+      right: 4px;
       display: flex;
       flex-direction: column;
       text-align: center;
@@ -290,6 +422,18 @@ export default {
       box-shadow: 0 4px 8px 6px rgba(7,17,27,0.08);
       border-top-left-radius: 8px;
       border-bottom-left-radius: 8px;
+      .menuctn {
+        font-size: 25px;
+        cursor: pointer;
+        span {
+          font-size: 15px;
+          position: relative;
+          bottom: 8px;
+        }
+        &:hover {
+          color: rgb(105, 107, 228);
+        }
+      }
       i.icon-article-like {
         font-size: 25px;
         cursor: pointer;

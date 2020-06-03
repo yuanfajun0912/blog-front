@@ -1,11 +1,14 @@
 <template>
   <div id="app" ref="app" :class="{moon: this.$store.state.isMoon}">
     <nav-bar v-if="isShowNav" ref="nav" :style="{ position: pos, color: navColor }"></nav-bar>
-    <transition name="fade" mode="in-out">
+    <transition name="fade" mode="in-out">  打包后会抖动，去掉过渡效果
       <keep-alive include="Home">
         <router-view></router-view>
       </keep-alive>
     </transition>
+    <!-- <keep-alive include="Home">
+      <router-view></router-view>
+    </keep-alive> -->
     <footer-bar v-if="isShowFooter"></footer-bar>
     <el-backtop target="#app" :visibility-height="1200">
       <i class="iconfont icon-backtop-sunny"></i>
@@ -63,7 +66,23 @@ export default {
     }
   },
   watch: {  
-    $route(to) { //动态监听路由变化
+    $route(to, from) { //动态监听路由变化
+      let reg = /detail/gm
+      let isToDetil = reg.test(to.path)
+      if(isToDetil && from.path === '/home') {  //从home页面到detail页面
+        let homeHeight = window.getComputedStyle(document.getElementById("home"),null).height  //获取home组件实际高度(px)
+        homeHeight = parseInt(homeHeight)
+        this.$store.commit('sureHomeToDetail', homeHeight)
+      }
+      if(isToDetil && from.path === '/tags') {  //从tags页面到detail页面
+        let tagsHeight = window.getComputedStyle(document.getElementById("tags"),null).height
+        tagsHeight = parseInt(tagsHeight)
+        this.$store.commit('sureTagsToDetail', tagsHeight)
+      }
+      if(reg.test(from.path) || (from.path === '/' && isToDetil)) {  //从detail页面出去或者是detail页面自我刷新
+        this.$store.commit('notChangeHeight')
+      }
+      // navbar的显示相关
       if(to.path !== '/home') {
         this.pos = 'relative'
         this.navColor = 'black'
@@ -114,6 +133,7 @@ export default {
     height: 100vh;   //规定app高度
     overflow: auto;  //确定能将backtop弄出来
     background-color: @sunnyBgColor;
+    scroll-behavior: smooth;  //平滑滚动效果
     .el-backtop {
       z-index: 2000;
       background-color: rgba(248, 245, 245, 0);
@@ -126,13 +146,14 @@ export default {
         color: rgba(250, 18, 1, 0.842);
       }
     }
-    .fade-enter {
+    .fade-enter {  //因为打包后抖动，去掉过渡效果了
       opacity:0;
     }
     .fade-leave{
       opacity:1;
     }
     .fade-enter-active{
+      // opacity:1;
       transition:opacity .5s;
     }
     .fade-leave-active{
@@ -140,8 +161,36 @@ export default {
       transition:opacity .5s;
     }
   }
-  div.moon {
+  div.moon {  //黑暗模式
     background-color: @moonBgColor !important;
+  }
+  #nprogress .bar {  //进度条自定义颜色
+    background: rgb(2, 171, 250) !important; //自定义颜色
+  }
+  .el-popover {  //el-popover很特殊，它不在app里，所以深度选择器也没用，只能放在全局样式
+    max-height: 450px;  //设置最大高度,超出时出现滚动条
+    overflow-y: auto;
+    overflow-x: hidden;
+    a {
+      color: black; 
+      display: block; 
+      text-decoration: none;
+      font-size: 14.5px;
+      margin-bottom: 3px;
+      line-height: 22px;
+      // font-weight: bold;
+      transition: .25s;
+      border-radius: 5px;
+      &:hover {
+        transition: .25s;
+        background-color: rgb(255, 187, 0);
+        color:rgb(255, 255, 255);
+      }
+    }
+    .current {
+      background-color: rgb(255, 187, 0);
+      color:rgb(255, 255, 255);
+    }
   }
 </style>
 

@@ -2,10 +2,12 @@
   <div id="tags">
     <div class="tags-top">
       <div class="tags-container">
-        <el-tag v-for="(tag, index) in tags" @click="getArticles(tag._id, index)"
-                :key="index" :class="{active: index === currentIndex}" :disable-transitions="true">
-                {{tag.tagName}}
-        </el-tag>
+        <el-badge v-for="(tag, index) in tags" :key="index" 
+                  :value="tag.selectArticles.length">
+          <el-tag @click="getArticles(tag._id, index)" :class="{active: index === currentIndex}"
+                  :disable-transitions="true">{{tag.tagName}}
+          </el-tag>
+        </el-badge>
       </div>
       <el-image class="tags-background" src="https://cdn.pixabay.com/photo/2020/04/11/03/41/china-5028679_960_720.jpg" fit="cover">
         <div slot="error" class="image-slot">
@@ -84,7 +86,6 @@ export default {
   },
   created() {
     this.getTags()
-    // this.getData()
   }
 }
 </script>
@@ -111,22 +112,27 @@ export default {
       width: 70%;
       top: 18%;
       left: 15%;  
-      .el-tag {
-        border-radius: 15px;
-        font-size: 14px;
-        margin: 0 10px 5px 0;
-        color: black;
-        background-color: @tagColor;  
-        border: 0;
-        cursor: pointer;
-        &:hover {
+      .el-badge {
+        margin: 0 13px 8px 0;
+        .el-tag {
+          border-radius: 15px;
+          font-size: 14px;
+          color: black;
+          background-color: @tagColor;  
+          border: 0;
+          cursor: pointer;
+          &:hover {
+            color: white;
+            background-color: rgba(69, 94, 204, 0.747);
+          }
+        }
+        /deep/ sup {
+          background-color:rgba(69, 94, 204, 0);
+        }
+        .active {
           color: white;
           background-color: rgba(69, 94, 204, 0.747);
         }
-      }
-      .active {
-        color: white;
-        background-color: rgba(69, 94, 204, 0.747);
       }
     }
     .tags-background {

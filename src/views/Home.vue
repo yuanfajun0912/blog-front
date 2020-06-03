@@ -1,5 +1,5 @@
 <template>
-  <div id="home" :class="{moon: this.$store.state.isMoon}"> 
+  <div id="home" :class="{moon: this.$store.state.isMoon}" ref="home"> 
      <el-carousel :interval="3500" height="380px" indicator-position="none" :arrow="howShowButton">
       <el-carousel-item v-for="(item, index) in topicArticles" 
                         :key="index"

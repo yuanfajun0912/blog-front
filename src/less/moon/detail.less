@@ -1,11 +1,24 @@
 div.moon {
+  .article-container {
+    color: @moonColor;
+    background-color: @moonSecondaryBgColor !important;
+    .markdown-body {
+      color: @moonColor;
+      /deep/ blockquote {  // 引用
+        color: rgb(192, 187, 187);
+        border-left-color: rgb(137, 137, 243);
+      }
+    }
+  }
+  .control {
+    color: @moonColor;
+    background-color: @moonSecondaryBgColor !important;
+  }
+  .el-divider__text {
+    color: @moonColor;
+    background-color: @moonSecondaryBgColor;
+  }
   .comments {
-    background-color: white !important;
-    /deep/ .has-nickname {
-      color: black;
-    }
-    /deep/ .show-more {
-      color: black;
-    }
+    background-color: @moonSecondaryBgColor !important;
   }
 }

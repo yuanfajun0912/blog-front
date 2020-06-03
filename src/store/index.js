@@ -11,6 +11,9 @@ export default new Vuex.Store({
     articleLike: {},  //更新文章喜欢
     articleComments: {}, //更新文章评论
     articleViews: {}, //更新文章浏览量
+    isHomeToDetail: false,  //是不是home到detail
+    isTagsToDetail: false,  //是不是tags到detail
+    fixValue: 0  //元素到页面顶部距离的修正值
   },
   mutations: {
     getIconTheme(state) {  //从sessionStorage中获取状态
@@ -54,6 +57,19 @@ export default new Vuex.Store({
     },
     changeArticleViews(state, aViews) { //更新文章评论
       state.articleViews = aViews
+    },
+    sureHomeToDetail(state, height) {  //从home到detail
+      state.isHomeToDetail = true
+      state.fixValue = height
+    },
+    sureTagsToDetail(state, height) {  //从tags到detail
+      state.isTagsToDetail = true
+      state.fixValue = height
+    },
+    notChangeHeight(state) {  //从detail页面出去或者是detail页面自我刷新
+      state.isHomeToDetail = false
+      state.isTagsToDetail = false
+      state.fixValue = 0
     }
   },
   actions: {

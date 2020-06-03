@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import NProgress from 'nprogress'  //顶部进度条
+import 'nprogress/nprogress.css'
 
 // 解决两次访问相同路由地址报错
 const originalPush = VueRouter.prototype.push
@@ -69,6 +71,10 @@ const router = new VueRouter({
 const defaultTitle = '念风'
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title || defaultTitle
+  NProgress.start()  //开启进度条
   next()
+})
+router.afterEach(() => {
+  NProgress.done()  //关闭进度条
 })
 export default router

@@ -160,6 +160,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+  @import "~less/moon/comments.less";
   #comments {
     width: 90%;
     margin: 0 auto;

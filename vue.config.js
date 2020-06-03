@@ -12,6 +12,8 @@ module.exports = {
     port: 8081,  //修改默认端口号  
   },
 
+  lintOnSave: false,  //关掉eslint
+
   configureWebpack: {  //配置别名
     resolve: {
       alias: {
