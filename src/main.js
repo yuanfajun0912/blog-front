@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import './plugins/element.js'
+// import './plugins/element.js'
 import './assets/iconfont/iconfont.css'  //引入阿里矢量图标
 import './less/global.less'  //less全局变量
 import axios from 'axios'

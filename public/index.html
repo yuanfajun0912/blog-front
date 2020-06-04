@@ -6,8 +6,18 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <!-- 引入element-ui样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.2/lib/theme-chalk/index.css">
+    <!-- 引入highlight.js样式 -->
+    <link href="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.0.3/styles/agate.min.css" rel="stylesheet">
   </head>
   <body>
+    <!-- cdn引入vue -->
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <!-- cdn引入element-ui组件 -->
+    <script src="https://unpkg.com/element-ui@2.13.2/lib/index.js"></script>
+    <!-- cdn引入highlight.js -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>

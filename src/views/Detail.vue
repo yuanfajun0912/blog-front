@@ -76,8 +76,8 @@
 
 <script>
 import marked from 'marked'
-import hljs from "highlight.js";
-import 'highlight.js/styles/agate.css';  //a11y-light.css
+// import hljs from "highlight.js";
+// import 'highlight.js/styles/agate.css';  //a11y-light.css
 import 'github-markdown-css';
 import Comments from 'components/content/Comments'
 // import { getArticleMenu } from 'common/utils.js'
