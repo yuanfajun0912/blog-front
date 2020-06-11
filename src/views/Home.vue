@@ -53,6 +53,7 @@ export default {
           page: 1
         }
       }).then(res => { 
+        // console.log(res)
         this.topicArticles = res.data.pop()
         const totalLength = res.data.pop()  //拿到博客总数
         this.total = totalLength  

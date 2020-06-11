@@ -35,8 +35,11 @@ module.exports = {
     },
     externals: {  // 外链cdn引入vue、element-ui
       'vue': 'Vue',
+      'vuex': 'Vuex',
       'element-ui': 'ELEMENT',
-      'highlight.js': 'hljs'
+      'highlight.js': 'hljs',
+      'vue-router': 'VueRouter',
+      'axios': 'axios'
     }
   },
 
