@@ -20,7 +20,7 @@
          :key="index" :href="item.url" target="_blank">{{item.name}}</a>
     </p>
     <p>© 2020 YFJ. All rights reserved.</p>
-    <a href="http://www.beian.miit.gov.cn" target="_blank">渝ICP备20004282号</a>
+    <a href="https://beian.miit.gov.cn/" target="_blank">渝ICP备20004282号-1</a>
   </div>
 </template>
 

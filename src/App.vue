@@ -1,7 +1,7 @@
 <template>
   <div id="app" ref="app" :class="{moon: this.$store.state.isMoon}">
     <nav-bar v-if="isShowNav" ref="nav" :style="{ position: pos, color: navColor }"></nav-bar>
-    <transition name="fade" mode="in-out">  打包后会抖动，去掉过渡效果
+    <transition name="fade" mode="in-out">  
       <keep-alive include="Home">
         <router-view></router-view>
       </keep-alive>
