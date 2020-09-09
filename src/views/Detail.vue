@@ -33,7 +33,7 @@
         <a :href="getCurrentUrl" style="text-decoration: none; color: blue">{{getCurrentUrl}}</a>，谢谢
       </p>
       <!-- 评论 -->
-      <el-divider content-position="left"><i id="comments-divider" class="iconfont icon-comments-sunny"></i><span>评论</span></el-divider>
+      <el-divider content-position="left"><i id="comments-divider" class="iconfont icon-comments-sunny"></i><span>历史评论</span></el-divider>
       <!--
         messages: 传给comments的评论/留言（可能不是所有评论/留言）
         total: 文章/留言板的所有评论/留言

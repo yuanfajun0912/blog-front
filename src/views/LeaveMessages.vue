@@ -1,6 +1,6 @@
 <template>
   <div id="leave-messages" :class="{moon: this.$store.state.isMoon}">
-    <el-divider content-position="left"><i class="el-icon-edit"></i><span>欢迎留言</span></el-divider>
+    <el-divider content-position="left"><i class="el-icon-edit"></i><span>历史留言</span></el-divider>
     <!--
         messages: 传给comments的评论/留言（可能不是所有评论/留言）
         total: 文章/留言板的所有评论/留言

@@ -90,6 +90,9 @@ export default {
     this.$bus.$on('openBtn', () => {  //动态开启btn
       this.howShowButton = 'always'
     })
+    this.$alert('由于某些“不可抗力”的原因，本站决定暂时关闭评论、留言功能，但还可继续浏览之前的游客留言，有需要联系博主的伙伴可以发我邮箱1014176753@qq.com', '访客须知', {
+      confirmButtonText: '我知道啦'
+    })
   }
 }
 </script>
