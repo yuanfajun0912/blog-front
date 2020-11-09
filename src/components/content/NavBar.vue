@@ -36,7 +36,7 @@ export default {
         { route: '/home', name: '首页' },
         { route: '/tags', name: '标签' },
         { route: '/timeline', name: '时间线' },
-        { route: '/leavemessages', name: '历史留言板' },
+        { route: '/leavemessages', name: '留言板' },
         { route: '/about', name: '关于' },
       ],
       currentIndex: 0,  //选中的 li 的索引值
