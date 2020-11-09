@@ -1,8 +1,8 @@
 <template>
   <div id="comments" :class="{moon: this.$store.state.isMoon}">
     <!-- 新建评论 -->
-    <!-- <div class="add-comment"> -->
-      <!-- <el-input
+    <div class="add-comment">
+      <el-input
         v-if="addComment.loginNum === 0"
         :class="{nickname: true, 'name-null': isNameNull}"
         clearable
@@ -13,9 +13,9 @@
         show-word-limit
         @blur="isNameNull = false; isNameRepeat = false"
       >
-      </el-input> -->
+      </el-input>
       <!-- 游客之前就有昵称的时候显示 -->
-      <!-- <h5 class="has-nickname" v-else>{{defaultNickName}}</h5>
+      <h5 class="has-nickname" v-else>{{defaultNickName}}</h5>
       <span v-show="isNameRepeat" style="font-size: 14px; color: red">
         <i class="el-icon-circle-close"></i>昵称重复，请重新输入
       </span>
@@ -35,7 +35,7 @@
         <el-button @click.native="submitComment" icon="el-icon-s-promotion" circle></el-button>
         <el-button @click.native="cancelSubmit" icon="el-icon-delete-solid" circle></el-button>
       </div>
-    </div> -->
+    </div>
     <!-- 评论列表 -->
     <div class="comments-list" v-for="(item, index) in messages" :key="index">
       <el-card shadow="never">
